@@ -1,14 +1,14 @@
 # 👁️ VisionGuard AI
 
-**VisionGuard AI** is an advanced artificial intelligence system designed to screen for Glaucoma using retinal fundus images. Powered by a fine-tuned **EfficientNet-B0** deep neural network, it provides rapid, high-confidence clinical screening augmented with Grad-CAM heatmaps for visual interpretability.
+**VisionGuard AI** is an advanced artificial intelligence system designed to screen for Glaucoma using retinal fundus images. Powered by a **Knowledge Distillation** architecture, it provides rapid, high-confidence clinical screening augmented with Grad-CAM heatmaps for visual interpretability.
 
 ---
 
 ## ✨ Features
 
-- **🧠 Deep Learning Diagnosis**: Utilizes transfer learning with a custom EfficientNet-B0 architecture to achieve high sensitivity and specificity in detecting Glaucoma.
+- **🧠 Knowledge Distillation Architecture**: Utilizes a teacher-student model paradigm. The **ResNet-50** Teacher model provides high-accuracy, slow-processing predictions, while the **EfficientNet-B0** Student model learns from the Teacher to deliver extremely fast and highly efficient real-time inferences.
 - **🗺️ Visual Explainability (Grad-CAM)**: Generates localized heatmaps that highlight the exact regions of the optic disc the neural network focused on, giving clinicians transparent AI insights.
-- **⚕️ Clinical Interface**: A sleek, medical-grade web dashboard built with Streamlit and React, designed for ease of use by healthcare professionals.
+- **⚕️ Clinical Interface**: A sleek, medical-grade web dashboard built with React and FastAPI, designed for ease of use by healthcare professionals.
 - **📊 Comprehensive Metrics**: Built-in evaluation tools generating ROC curves, Confusion Matrices, and performance reports.
 
 ---
@@ -17,23 +17,22 @@
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
-| **Core Model** | PyTorch, `torchvision` | Fine-tuned EfficientNet-B0 for binary image classification. |
+| **Teacher Model** | PyTorch (ResNet-50) | High accuracy, robust feature extraction. |
+| **Student Model** | PyTorch (EfficientNet-B0)| Fast, lightweight inference mimicking the Teacher. |
 | **Model Interpretability**| `pytorch-grad-cam` | Provides visual bounding and heatmaps for AI focus areas. |
-| **Dashboard Interface** | Streamlit | Rapid UI prototyping and image uploading / previewing. |
-| **Full-Stack UI** | React, Vite, FastAPI | Scalable architecture for deployment and API interaction. |
+| **Backend API** | FastAPI | High-performance backend serving the distillation models. |
+| **Frontend UI** | React, Vite | Scalable, responsive web architecture for clinical use. |
 
 ### 📂 Project Structure
 ```text
 VisionGuard AI/
-├── app.py               # Streamlit interactive web dashboard
 ├── backend/             # FastAPI backend for model serving
 │   ├── main.py          # API Endpoints
-│   └── models.py        # PyTorch model definitions
+│   └── models.py        # PyTorch Teacher & Student model definitions
 ├── frontend/            # React/Vite web application
 ├── model/               # Trained .pth model weights (Git Ignored)
 ├── data/                # ACRIMA Fundus Image Dataset (Git Ignored)
-├── notebooks/           # Jupyter notebooks for data exploration
-├── report/              # ML PBL Reports and LaTeX files
+├── notebooks/           # Jupyter notebooks for distillation pipeline
 └── results/             # Generated ROC curves and Confusion Matrices
 ```
 
@@ -65,19 +64,9 @@ VisionGuard AI/
 3. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
-   pip install torch torchvision streamlit pytorch-grad-cam pillow numpy
    ```
 
-### 2. Running the Clinical Dashboard
-
-The easiest way to interact with the model locally is via the Streamlit dashboard:
-
-```bash
-streamlit run app.py
-```
-*The dashboard will automatically open in your default browser.*
-
-### 3. Running the Full Stack App (FastAPI + React)
+### 2. Running the Full Stack App (FastAPI + React)
 
 **Backend API:**
 ```bash
@@ -96,9 +85,9 @@ npm run dev
 
 ## 🧠 Model Training & Dataset
 
-VisionGuard AI was trained on the **ACRIMA dataset**, containing 705 annotated retinal fundus images (396 glaucomatous, 309 normal).
+VisionGuard AI was trained on the **ACRIMA dataset**, containing 705 annotated retinal fundus images (396 glaucomatous, 309 normal). The training leverages a Distillation Pipeline where the heavy ResNet-50 guides the lightweight EfficientNet-B0.
 
-To retrain or evaluate the model:
+To retrain or evaluate the models:
 ```bash
 python evaluate.py
 ```
