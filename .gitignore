@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Models and Data
+model/
+models/
+*.pth
+*.pt
+*.h5
+data/
+data.zip
+results/
+logs.txt
+
+# Node
+frontend/node_modules/
+node_modules/
+frontend/dist/
+dist/
+npm-debug.log
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
